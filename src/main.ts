@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
@@ -15,6 +15,15 @@ async function bootstrap() {
 
   // // set global prefix ------------
   app.setGlobalPrefix('api');
+
+  // // set global pipes ------------
+  app.useGlobalPipes(
+    // validate DTOs
+    new ValidationPipe({
+      whitelist: true, // remueve extra data of DTO - like Mongoose ODM
+      // forbidNonWhitelisted: true, // envia 1 error con las properties q NO estan definidas en DTO
+    }),
+  );
 
   // // start app ------------
   await app.listen(PORT);
