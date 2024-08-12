@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -11,6 +12,7 @@ import {
 } from '@nestjs/common';
 
 import { ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 import { PRODUCTS_SERVICE } from 'src/config';
 import { PaginationDto } from 'src/shared/dtos';
 
@@ -30,6 +32,7 @@ export class ProductsController {
   findAllProducts(@Query() paginationDto: PaginationDto) {
     // send to await response (async - MessagePattern) | emit just emit event and don't wait for response
     return this.productsClient.send(
+      // .send() retorna Observable
       { cmd: 'find_all_products' },
       {
         ...paginationDto,
@@ -38,8 +41,18 @@ export class ProductsController {
   }
 
   @Get(':id')
-  findOneProduct(@Param('id') id: string) {
-    return 'This action returns a product #' + id;
+  async findOneProduct(@Param('id') id: string) {
+    try {
+      // // observable requiere subscribe: firstValueFrom() retorna Promise y recibe Observable
+      // espera el 1er valor q el observable emita (maneja el subscribe/unsubscribe x debajo)
+      const product = await firstValueFrom(
+        this.productsClient.send({ cmd: 'find_one_product' }, { id }),
+      );
+
+      return product;
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
   @Patch(':id')
