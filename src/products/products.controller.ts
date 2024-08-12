@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -11,8 +10,9 @@ import {
   Query,
 } from '@nestjs/common';
 
-import { ClientProxy } from '@nestjs/microservices';
-import { firstValueFrom } from 'rxjs';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
+import { catchError } from 'rxjs';
+
 import { PRODUCTS_SERVICE } from 'src/config';
 import { PaginationDto } from 'src/shared/dtos';
 
@@ -42,6 +42,13 @@ export class ProductsController {
 
   @Get(':id')
   async findOneProduct(@Param('id') id: string) {
+    return this.productsClient.send({ cmd: 'find_one_product' }, { id }).pipe(
+      catchError((err) => {
+        throw new RpcException(err);
+      }),
+    );
+
+    /* // // 2. parsing observables to promises
     try {
       // // observable requiere subscribe: firstValueFrom() retorna Promise y recibe Observable
       // espera el 1er valor q el observable emita (maneja el subscribe/unsubscribe x debajo)
@@ -51,8 +58,8 @@ export class ProductsController {
 
       return product;
     } catch (error) {
-      throw new BadRequestException(error.message);
-    }
+      throw new RpcException(error); // to be caught by RpcCustomExceptionFilter
+    } */
   }
 
   @Patch(':id')

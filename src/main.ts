@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module';
 import { envs } from './config';
+import { RpcCustomExceptionFilter } from './shared/exceptions';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -24,6 +25,9 @@ async function bootstrap() {
       // forbidNonWhitelisted: true, // envia 1 error con las properties q NO estan definidas en DTO
     }),
   );
+
+  // // global filters ------------
+  app.useGlobalFilters(new RpcCustomExceptionFilter());
 
   // // start app ------------
   await app.listen(PORT);
