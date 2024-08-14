@@ -7,6 +7,10 @@ interface EnvVars {
   // products microservice
   PRODUCTS_MICROSERVICE_HOST: string;
   PRODUCTS_MICROSERVICE_PORT: number;
+
+  // orders microservice
+  ORDERS_MICROSERVICE_HOST: string;
+  ORDERS_MICROSERVICE_PORT: number;
 }
 
 // validate envs with joi schema
@@ -17,6 +21,10 @@ const envsSchema = joi
     // products microservice
     PRODUCTS_MICROSERVICE_HOST: joi.string().required(),
     PRODUCTS_MICROSERVICE_PORT: joi.number().required(),
+
+    // orders microservice
+    ORDERS_MICROSERVICE_HOST: joi.string().required(),
+    ORDERS_MICROSERVICE_PORT: joi.number().required(),
   })
   .unknown(true); // allow other envs not defined in schema - process.env
 
@@ -33,4 +41,8 @@ export const envs = {
   // products microservice
   PRODUCTS_MICROSERVICE_HOST: envsVars.PRODUCTS_MICROSERVICE_HOST,
   PRODUCTS_MICROSERVICE_PORT: envsVars.PRODUCTS_MICROSERVICE_PORT,
+
+  // orders microservice
+  ORDERS_MICROSERVICE_HOST: envsVars.ORDERS_MICROSERVICE_HOST,
+  ORDERS_MICROSERVICE_PORT: envsVars.ORDERS_MICROSERVICE_PORT,
 };
