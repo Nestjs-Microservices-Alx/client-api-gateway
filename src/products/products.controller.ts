@@ -14,7 +14,7 @@ import {
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { catchError } from 'rxjs';
 
-import { PRODUCTS_SERVICE } from 'src/config';
+import { NATS_SERVICE } from 'src/config';
 import { PaginationDto } from 'src/shared/dtos';
 import { CreateProductDto, UpdateProductDto } from './dto';
 
@@ -22,7 +22,7 @@ import { CreateProductDto, UpdateProductDto } from './dto';
 export class ProductsController {
   constructor(
     // microservices: mismo name q se uso al registrar el microservicio en el module `ClientsModule`
-    @Inject(PRODUCTS_SERVICE) private readonly productsClient: ClientProxy,
+    @Inject(NATS_SERVICE) private readonly productsClient: ClientProxy,
   ) {}
 
   @Post()
