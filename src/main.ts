@@ -31,6 +31,6 @@ async function bootstrap() {
 
   // // start app ------------
   await app.listen(PORT);
-  logger.log(`App is running on port ${PORT}`);
+  logger.log(`Client Gateway is running on port ${PORT}`);
 }
 bootstrap();
