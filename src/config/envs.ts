@@ -27,12 +27,12 @@ const envsSchema = joi
 
     // // TCP ===================================
     // products microservice
-    PRODUCTS_MICROSERVICE_HOST: joi.string().required(),
-    PRODUCTS_MICROSERVICE_PORT: joi.number().required(),
+    // PRODUCTS_MICROSERVICE_HOST: joi.string().required(),
+    // PRODUCTS_MICROSERVICE_PORT: joi.number().required(),
 
     // orders microservice
-    ORDERS_MICROSERVICE_HOST: joi.string().required(),
-    ORDERS_MICROSERVICE_PORT: joi.number().required(),
+    // ORDERS_MICROSERVICE_HOST: joi.string().required(),
+    // ORDERS_MICROSERVICE_PORT: joi.number().required(),
   })
   .unknown(true); // allow other envs not defined in schema - process.env
 

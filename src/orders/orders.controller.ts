@@ -31,9 +31,15 @@ export class OrdersController {
 
   @Get()
   findAllProducts(@Query() orderFiltersDto: OrderFilterDto) {
-    return this.client.send('findAllOrders', {
-      ...orderFiltersDto,
-    });
+    return this.client
+      .send('findAllOrders', {
+        ...orderFiltersDto,
+      })
+      .pipe(
+        catchError((err) => {
+          throw new RpcException(err);
+        }),
+      );
   }
 
   @Get('status/:status')

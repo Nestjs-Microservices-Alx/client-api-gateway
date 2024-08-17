@@ -8,8 +8,18 @@ export class RpcCustomExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp(); // toma el contexto de ejecucion (Express, Fastify, etc)
     const response = ctx.getResponse();
 
-    //
+    // microservices error handling
     const rpcError = exception.getError();
+    // down microservice error handling
+    if (rpcError.toString().includes('Empty response')) {
+      return response.status(500).json({
+        statusCode: 500,
+        message: rpcError
+          .toString()
+          .substring(0, rpcError.toString().indexOf('(') - 1),
+      });
+    }
+
     if (
       typeof rpcError === 'object' &&
       'status' in rpcError &&
